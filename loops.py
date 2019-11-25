@@ -27,3 +27,9 @@ print("fourth loop\n")
 
 for index in range(len(friends)):
     print(friends[index])
+
+for i in range(5):
+    if i == 0:
+        print("first round")
+    else:
+        print("not first")
