@@ -1,6 +1,0 @@
-Giraffe Language
-vowels -> g
-----------------
-ex:
-    dog -> dgg
-    cat -> cgt
