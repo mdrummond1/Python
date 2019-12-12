@@ -1,11 +1,11 @@
 import random
 board_state = [
-    [1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1],
-    [1, 0, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1, 1]
+    [0, 0, 1, 1, 0, 1, 0],
+    [1, 1, 0, 1, 1, 0, 1],
+    [1, 0, 1, 1, 0, 1, 1],
+    [1, 0, 1, 0, 1, 0, 1],
+    [0, 0, 1, 0, 0, 0, 1],
+    [0, 1, 0, 1, 1, 1, 0]
 ]
 
 alive = 1
@@ -26,15 +26,29 @@ def dead_state(width, height):
 def random_state(width, height):
     #build board with dead_state
     board = dead_state(width, height)
+    #random.seed()
 
-    #randomize board    
+    #randomize board
+    print("before randomizing: " + str(board))    
     for row in range(height):
         for col in range(width):
-            board[row][col] = random.randint(0, 1)
+            rand = random.random()
+            print("rand: " + str(rand))
+            if rand > 0.5:
+                board[row][col].__setitem__(1)
+            else:
+                board[row][col].__setitem__(0)
+
+            print("board[" + str(row) + "][" + str(col) + "]: " + str(board[row][col]))
+        
+        print("board[" + str(row) + "]: " + str(board[row]))
+    
+    print("after randomizing: " + str(board))
+    
     return board
 
 def render(state):
-    #dead cells = '%'; live cells = '#'
+    #dead cells = '.'; live cells = '#'
     rows = len(state)
     cols = len(state[0])
     print("|", end="")
@@ -48,9 +62,9 @@ def render(state):
         #print rows
             cell = state[row][col]
             if cell == 0:
-                print('%', " ", end="")
+                print('.', "", end="")
             else:
-                print('#', " ", end="")
+                print('#', "", end="")
         print("|\n")
 
     print("|", end="")
@@ -60,51 +74,162 @@ def render(state):
 
 def count_neighbors(board, row, col):
     #if row == 0, then above = board[len(board) - 1][col-1] + board[len(board)-1][col] + board[len(board)-1][col+1]
+    """
+    cases:
+        1. first row and first column
+        2. first row and a middle column
+        3. first row and last column
+        4. a middle row and first column
+        5. a middle row and a middle column
+        6. middle row and last column
+        7. last row and first column
+        8. last row and a middle column
+        9. last row and last column
+    """    
+    prev_row = row - 1 
+    next_row = row + 1
+    prev_col = col - 1
+    next_col = col + 1
+
+    """ print("# of columns: " + str(len(board[0])))
+    print("# of rows: " + str(len(board)))
+    print("passed in row " + str(row) + " and column " + str(col)) """
+
+
+    #if first row, previous row is the last row
+    if row == 0:
+        prev_row = (len(board) - 1)
+        #print("prev_row set to " + str(prev_row))
+
     
-    above =  board[row - 1][col - 1] + board[row - 1][col] + board[row - 1][col + 1]
-    print("row above: " + str(board[row-1][col-1]) + " " + str(board[row - 1][col]) + " " + str(board[row - 1][col + 1]))
-    print("above: " + str(above))
+    #if last row, next row is the first row
+    elif row == (len(board) - 1):
+        next_row = 0
+       # print("next_row set to " + str(next_row))
     
-    adjacent = board[row][col - 1] + board[row][col + 1]
-    print("current row: " + str(board[row][col-1] ) + " " + str(board[row][col]) + " " + str(board[row][col+1]))
-    print("adjacent: " + str(adjacent))
+    #if first column, previous column is the last column
+    if col == 0:
+        prev_col = len(board[0]) - 1
+      #  print("prev_col set to " + str(prev_col))
     
-    below = board[row + 1][col - 1] + board[row + 1][col] + board[row + 1][col + 1]
-    print("row below: " + str(board[row+1][col-1]) + " " + str(board[row+1][col]) + " " + str(board[row+1][col+1])  )
-    print("below: " + str(below))
+    
+    #if last column, next column is the first column
+    elif col == (len(board[0]) - 1):
+        next_col = 0
+     #   print("next_col set to " + str(next_col))
+    
+    #print("prev_row: " + str(prev_row))
+    #print("row: " + str(row))
+    #print("next_row: " + str(next_row))
+    #print("prev_col: " + str(prev_col))
+    #print("col: " + str(col))
+    #print("next_col: " + str(next_col))
+    
+    #                1           3               1       4               1           5
+    above = board[prev_row][prev_col] + board[prev_row][col] + board[prev_row][next_col]
+    #print("row above: " + str(board[prev_row][prev_col]) + " " + str(board[prev_row][col]) + " " + str(board[prev_row][next_col]))
+    #print("above: " + str(above))
+    
+    adjacent = board[row][prev_col] + board[row][next_col]
+    #print("current row: " + str(board[row][prev_col]) + " " + str(board[row][col]) + " " + str(board[row][next_col]))
+    #print("adjacent: " + str(adjacent))
+    
+    below = board[next_row][prev_col] + board[next_row][col] + board[next_row][next_col]
+    #print("row below: " + str(board[next_row][prev_col]) + " " + str(board[next_row][col]) + " " + str(board[next_row][next_col])  )
+    #print("below: " + str(below))
 
     #TODO: add support for first/last rows/columns
     return above + adjacent + below
     
-def next_board_state(board):
-    live_neighbors = 0
-    rows = len(board)
-    columns = len(board[0])
+def next_board_state(initial_state):
+
+    next_state = dead_state(len(initial_state[0]), len(initial_state))
+
+    rows = len(initial_state)
+    columns = len(initial_state[0])
     for row in range(rows):
         for col in range(columns):
-            #if live cell has 0, 1 living neighbors, it dies
-            if board[row][col] == alive:
-                print("cell is alive!")
-                count = count_neighbors(board, row, col) 
-        
-      
-            #If a live cell has 2, 3 living neighbors, it stays alive
-            #if a live cell has more than 3 living neighbors, it dies
-            #If a dead cell has exactly 3 neighbors, it comes to life
+            if initial_state[row][col] == 1:
+                #print("cell is alive!")
+                count = count_neighbors(initial_state, row, col)
+            
+                #if a live cell has more than 3 living neighbors, it dies
+                if count > 3:
+                    #print("the cell died")
+                    next_state[row][col] = 0
+                
+                #If a live cell has 2, 3 living neighbors, it stays alive
+                elif count > 1:
+                    #print("the cell stays alive!")
+                    next_state[row][col] = 1
 
+                #if live cell has 0, 1 living neighbors, it dies
+                elif count >= 0:
+                    #print("the cell died!")
+                    next_state[row][col] = 0
+                
+                #otherwise keep the same state
+                else:
+                    next_state[row][col] = initial_state[row][col]
+                
+            
+            #If a dead cell has exactly 3 neighbors, it comes to life
+            else:
+                next_state[row][col] = 1
+    return next_state
 
 #width = int(input("Enter size of width: "))
 #height = int(input("Enter size of height: "))
+#print(board_state)
+#next_board_state(board_state)
 
-width = 5
-height = 5
 
-board = random_state(width, height)
 
-""" for i in range(height):
-    for j in range(width):
-        print("cell [" + str(i) + "]" + "[" + str(j) + "]" )
-        print("living neighbors: " + str(count_neighbors(board, i, j))) """
+"""
+board
+1   1   1   1   1   1   1
+1   1   1   1   1   1   1
+1   1   1   1   1   1   1
+1   0   1   1   1   1   1
+1   1   1   1   1   1   1
 
-count_neighbors(board, 2, 2)
-#render(board)
+
+print("case 1: ")
+count_neighbors(board, 0, 0)
+
+print("case 2: ")
+count_neighbors(board, 0, 2)
+
+print("case 3: ")
+count_neighbors(board, 0, 4)
+
+print("case 4: ")
+count_neighbors(board, 3, 0)
+
+print("case 5: ")
+count_neighbors(board, 2, 3)
+
+print("case 6: ")
+count_neighbors(board, 3, 4)
+
+print("case 7: ")
+count_neighbors(board, 4, 0)
+
+print("case 8: ")
+count_neighbors(board, 4, 2)
+
+print("case 9: ")
+count_neighbors(board, 4, 4)"""
+def main():
+    width = 5
+    height = 5    
+    print(random_state(width, height))
+    #board = board_state
+    #render(board)
+    
+    #board = next_board_state(board)
+    #render(board)
+if __name__ == "__main__":
+    main()
+
+
