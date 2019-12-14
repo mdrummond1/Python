@@ -13,37 +13,18 @@ dead = 0
 
 def dead_state(width, height):
     #build a board that is size width x height
-    board = []
-    for col in range(width):
-        board.append(0)
-    state = [board]
-
-    for row in range(height - 1):
-        state.append(board)
-
-    return state
+    board = [[0 for _ in range(width)] for _ in range(height)]
+    return board
 
 def random_state(width, height):
     #build board with dead_state
     board = dead_state(width, height)
 
     #randomize board
-    print("before randomizing: " + str(board)) 
-
     for row in range(height):
-
         for col in range(width):
-            print("board[" + str(row) + "][" + str(col) + "] before: " + str(board[row][col]))
             board[row][col] = random.randint(0, 1)
-            """ if random.random() > 0.5:
-                board[row][col] = 1
-            else:
-                board[row][col] = 0 """
-        print("board[" + str(row) + "] after: " + str(board[row]))
-
-
-    
-    print("board after randomizing: " + str(board))
+ 
     return board
 
 def render(state):
@@ -51,7 +32,7 @@ def render(state):
     rows = len(state)
     cols = len(state[0])
     print("|", end="")
-    for col in range(cols*3):
+    for col in range(cols*2):
         print("-", end="")
     print("|\n")
     
@@ -67,7 +48,7 @@ def render(state):
         print("|\n")
 
     print("|", end="")
-    for col in range(cols*3):
+    for col in range(cols*2):
         print("-", end="")
     print("|\n")
 
@@ -137,7 +118,6 @@ def count_neighbors(board, row, col):
     #print("row below: " + str(board[next_row][prev_col]) + " " + str(board[next_row][col]) + " " + str(board[next_row][next_col])  )
     #print("below: " + str(below))
 
-    #TODO: add support for first/last rows/columns
     return above + adjacent + below
     
 def next_board_state(initial_state):
@@ -148,39 +128,43 @@ def next_board_state(initial_state):
     columns = len(initial_state[0])
     for row in range(rows):
         for col in range(columns):
-            if initial_state[row][col] == 1:
-                #print("cell is alive!")
-                count = count_neighbors(initial_state, row, col)
             
+            count = count_neighbors(initial_state, row, col)
+            #print("cell has " + str(count) + " living neighbors")
+            
+            if initial_state[row][col] == 1:
+            
+                #print("cell is alive!")
+
                 #if a live cell has more than 3 living neighbors, it dies
                 if count > 3:
-                    #print("the cell died")
+                    #print("count > 3. the cell died")
                     next_state[row][col] = 0
                 
                 #If a live cell has 2, 3 living neighbors, it stays alive
                 elif count > 1:
-                    #print("the cell stays alive!")
+                    #print("count > 1. cell stays alive")
                     next_state[row][col] = 1
 
                 #if live cell has 0, 1 living neighbors, it dies
                 elif count >= 0:
-                    #print("the cell died!")
+                    #print("count >= 0. the cell died!")
                     next_state[row][col] = 0
                 
                 #otherwise keep the same state
                 else:
+                    #print("no change")
                     next_state[row][col] = initial_state[row][col]
                 
             
-            #If a dead cell has exactly 3 neighbors, it comes to life
+            #If a dead cell has exactly 3 living neighbors, it comes to life
             else:
-                next_state[row][col] = 1
+                if count == 3:
+                    #print("The cell comes to life")
+                    next_state[row][col] = 1
     return next_state
 
-#width = int(input("Enter size of width: "))
-#height = int(input("Enter size of height: "))
-#print(board_state)
-#next_board_state(board_state)
+
 
 
 
@@ -191,8 +175,8 @@ board
 1   1   1   1   1   1   1
 1   0   1   1   1   1   1
 1   1   1   1   1   1   1
-
-
+"""
+""" 
 print("case 1: ")
 count_neighbors(board, 0, 0)
 
@@ -218,17 +202,93 @@ print("case 8: ")
 count_neighbors(board, 4, 2)
 
 print("case 9: ")
-count_neighbors(board, 4, 4)"""
+count_neighbors(board, 4, 4) """
+
 def main():
-    width = 7
-    height = 5    
-    random_state(width, height)
-    #board = board_state
-    #render(board)
     
-    #board = next_board_state(board)
-    #render(board)
+    width = 100
+    height = 75
+    board = random_state(width, height)
+    while True:
+        board = next_board_state(board)
+        render(board)
+
 if __name__ == "__main__":
     main()
+    """ init_board = [[0, 0, 0],
+                  [0, 0, 0],
+                  [0, 0, 0]]
 
+    expected_next = [[0, 0, 0], 
+                     [0, 0, 0],
+                     [0, 0, 0]]
 
+    actual_next = next_board_state(init_board)
+    if expected_next == actual_next:
+        print("PASSED TEST 1!")
+    else:
+        print("FAILED TEST 1!")
+        print("Expected: ")
+        print(expected_next)
+        print("Actual: ")
+        print(actual_next)
+    
+    init_board = [[0, 0, 1],
+                  [0, 1, 1],
+                  [0, 0, 0]]
+
+    expected_next = [[1, 1, 1],
+                     [1, 1, 1],
+                     [1, 1, 1]]
+
+    actual_next = next_board_state(init_board)
+
+    if expected_next == actual_next:
+        print("PASSED TEST 2!")
+    else:
+        print("FAILED TEST 2!")
+        print("Expected: ")
+        print(expected_next)
+        print("Actual: ")
+        print(actual_next)
+    
+    init_board = [[1, 0, 1],
+                  [0, 1, 0],
+                  [1, 0, 1]]
+    
+    expected_next = [[0, 0, 0],
+                     [0, 0, 0],
+                     [0, 0, 0]]
+    
+    actual_next = next_board_state(init_board)
+    if expected_next == actual_next:
+        print("PASSED TEST 3!")
+    else:
+        print("FAILED TEST 3!")
+        print("Expected: ")
+        print(expected_next)
+        print("Actual: ")
+        print(actual_next)
+
+    init_board = [[1, 0, 0, 0],
+                  [0, 0, 1, 0],
+                  [0, 1, 0, 0],
+                  [0, 0, 0, 0]]
+
+    expected_next = [[1, 0, 0, 0],
+                     [0, 0, 1, 0],
+                     [0, 1, 0, 0],
+                     [0, 0, 0, 0]]
+    
+    actual_next = next_board_state(init_board)
+
+    if expected_next == actual_next:
+        print("PASSED TEST 4!")
+    else:
+        print("FAILED TEST 4!")
+        print("Expected: ")
+        print(expected_next)
+        print("Actual: ")
+        print(actual_next) """
+
+    
