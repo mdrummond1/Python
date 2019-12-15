@@ -11,6 +11,20 @@ board_state = [
 alive = 1
 dead = 0
 
+def load_board_state(file):
+    fl = open(file)
+    state_from_file = fl.read()
+
+    state_from_file = state_from_file.split()
+
+    state = []
+
+    for i in range(len(state_from_file)):
+        temp = [int(j) for j in state_from_file[i]]
+        state.insert(i, temp)
+    
+    return state
+    
 def dead_state(width, height):
     #build a board that is size width x height
     board = [[0 for _ in range(width)] for _ in range(height)]
@@ -31,10 +45,10 @@ def render(state):
     #dead cells = '.'; live cells = '#'
     rows = len(state)
     cols = len(state[0])
-    print("|", end="")
+    """ print("|", end="")
     for col in range(cols*2):
         print("-", end="")
-    print("|\n")
+    print("|\n") """
     
     for row in range(rows):
         print("|", end="")
@@ -42,16 +56,16 @@ def render(state):
         #print rows
             cell = state[row][col]
             if cell == 0:
-                print('.', "", end="")
+                print('\'', "", end="")
             else:
                 print('#', "", end="")
         print("|\n")
 
-    print("|", end="")
+    """ print("|", end="")
     for col in range(cols*2):
         print("-", end="")
     print("|\n")
-
+ """
 def count_neighbors(board, row, col):
     #if row == 0, then above = board[len(board) - 1][col-1] + board[len(board)-1][col] + board[len(board)-1][col+1]
     """
@@ -206,15 +220,18 @@ count_neighbors(board, 4, 4) """
 
 def main():
     
-    width = 100
+    width = 800
     height = 75
+    #board = load_board_state("./ggg.txt")
     board = random_state(width, height)
+    render(board)
     while True:
         board = next_board_state(board)
         render(board)
 
 if __name__ == "__main__":
     main()
+
     """ init_board = [[0, 0, 0],
                   [0, 0, 0],
                   [0, 0, 0]]
