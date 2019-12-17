@@ -28,7 +28,6 @@ def random_state(width, height):
     return board
 
 def render(state):
-    #dead cells = '.'; live cells = '#'
     rows = len(state)
     cols = len(state[0])
     print("|", end="")
@@ -40,8 +39,9 @@ def render(state):
         print("|", end="")
         for col in range(cols):
         #print rows
+            #dead cells = '.'; live cells = '#'
             cell = state[row][col]
-            if cell == 0:
+            if cell == dead:
                 print('.', "", end="")
             else:
                 print('#', "", end="")
@@ -132,7 +132,7 @@ def next_board_state(initial_state):
             count = count_neighbors(initial_state, row, col)
             #print("cell has " + str(count) + " living neighbors")
             
-            if initial_state[row][col] == 1:
+            if initial_state[row][col] == alive:
             
                 #print("cell is alive!")
 
@@ -156,9 +156,9 @@ def next_board_state(initial_state):
                     #print("no change")
                     next_state[row][col] = initial_state[row][col]
                 
-            
-            #If a dead cell has exactly 3 living neighbors, it comes to life
+            #otherwise cell is dead
             else:
+                #If a dead cell has exactly 3 living neighbors, it comes to life
                 if count == 3:
                     #print("The cell comes to life")
                     next_state[row][col] = 1
