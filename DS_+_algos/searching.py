@@ -1,3 +1,11 @@
+'''
+    LINEAR-SEARCH
+        for i = 1 to n do
+            if A[i] = v
+                print(i)
+                return
+        print(0)
+'''
 def linearSearch(array, x):
     for i in range(0, len(array)):
         if array[i] == x:
