@@ -23,10 +23,37 @@ def insertion_sort(array):
 
     return array
     
-a = [12, 9, 5, 2, 11, 98, 34, 76, 10]
+'''
+    SELECT-SORT(A)
+        for i = 1 to n - 1 do
+            //find smallest key in  A[1..n]
+            //exchange it with A[i]
+            for j = i + 1 to n do
+                if A[j] < smallest
+                    loc = j
+            //A[i] <-> A[loc]
+            A[loc] = A[i]
+            A[i] = smallest
+'''
+
+def select_sort(array):
+    for i in range(0, len(array) - 1):
+        smallest = array[i]
+        loc = i
+        for j in range(i + 1, len(array)):
+            if array[j] < smallest:
+                smallest = array[j]
+                loc = j
+        array[loc] = array[i]
+        array[i] = smallest
+    return array
+
+a = [9, 12, 3, 6, 112, 98, 34, 75, 7]
 
 print("before sort a is " + str(a))
 
-a = insertion_sort(a)
+#a = insertion_sort(a)
+a = select_sort(a)
 
 print("after sort a is " + str(a))
+
