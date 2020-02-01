@@ -21,3 +21,10 @@ number_grid = [
 for row in range(len(number_grid)):
     for column in range(len(number_grid[row])):
         print(number_grid[row][column])
+
+#list slicing
+print(num[1:5:2])
+
+#list comprehensions
+list1 = [x**2 for x in range(5) if x**2 % 2 == 1]
+print("list1: {}".format(list1))
