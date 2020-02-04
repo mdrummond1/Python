@@ -86,10 +86,11 @@ def merge_sort(arr, l, r):
     merge_sort(arr, mid + 1, r)
     
     merge(arr, l, mid, r)
+    return arr
 
 def merge(arr, l, mid, r):
     num1 = mid - l + 1
-    num2 = r - mid
+    num2 = r - mid 
     L = [arr[l + i - 1] for i in range(num1)]
     R = [arr[mid + j] for j in range(num2)]
     L[num1 + 1] = -1
@@ -109,6 +110,7 @@ print("before sort a is " + str(a))
 
 #a = insertion_sort(a)
 a = select_sort(a)
+#a = merge_sort(a)
 
 print("after sort a is " + str(a))
 
