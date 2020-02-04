@@ -56,7 +56,7 @@ def render(state):
         #print rows
             cell = state[row][col]
             if cell == 0:
-                print('\'', "", end="")
+                print('.', "", end="")
             else:
                 print('#', "", end="")
         print("|\n")
@@ -220,9 +220,9 @@ count_neighbors(board, 4, 4) """
 
 def main():
     
-    width = 800
+    width = 100
     height = 75
-    #board = load_board_state("./ggg.txt")
+    #board = load_board_state("./glider.txt")
     board = random_state(width, height)
     render(board)
     while True:
