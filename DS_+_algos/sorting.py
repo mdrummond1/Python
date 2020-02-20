@@ -1,4 +1,5 @@
 import math
+import sys
 '''
 	INSERTION-SORT(A):
 		1 for j = 2 to A.length
@@ -56,8 +57,21 @@ def select_sort(array):
         q = floor((p  + r) / 2)
         MERGE-SORT(A, p, q)
         MERGE-SORT(A, q+1, r)
-        Merge(A, P, q, r)
+        Merge(A, p, q, r)
+'''
+def merge_sort(arr, l, r):
+    if l >= r:
+        return
+    
+    mid = math.floor((l + r) / 2)
+    
+    merge_sort(arr, l, mid)
+    merge_sort(arr, mid + 1, r)
+    
+    merge(arr, l, mid, r)
 
+    return arr
+'''    
     MERGE(A, p, q, r)
         n1 = q - p + 1
         n2 = r - q
@@ -77,40 +91,52 @@ def select_sort(array):
             else if  A[k] = R[j]
                 j++
 '''
-def merge_sort(arr, l, r):
-    if l >= r:
-        return
-    mid = math.floor((l + r) / 2)
-    
-    merge_sort(arr, l, mid)
-    merge_sort(arr, mid + 1, r)
-    
-    merge(arr, l, mid, r)
-    return arr
 
 def merge(arr, l, mid, r):
+
     num1 = mid - l + 1
     num2 = r - mid 
-    L = [arr[l + i - 1] for i in range(num1)]
-    R = [arr[mid + j] for j in range(num2)]
-    L[num1 + 1] = -1
-    R[num2 + 1] = -1
-    i = j = 1
 
-    for k in range(mid, r):
+    #L = [arr[l + i - 1] for i in range(num1)]
+    #R = [arr[mid + j] for j in range(num2)]
+    L = [0] * (num1)
+    R = [0] * (num2)
+
+    for i in range(0, num1):
+        L[i] = arr[l + i]
+
+    for j in range(0, num2):
+        R[j] = arr[mid + 1 + j]
+
+    i = j = 0
+    k = l
+
+    while i < num1 and j < num2:
         if L[i] <= R[j]:
             arr[k] = L[i]
             i += 1
-        elif arr[k] == R[j]:
+        else:
+            arr[k] = R[j]
             j += 1
+        k += 1
 
-a = [9, 12, 3, 6, 112, 98, 34, 75, 7]
+    while i < num1:
+        arr[k] = L[i]
+        i += 1
+        k += 1
+
+    while j < num2:
+        arr[k] = R[j]
+        j += 1
+        k += 1
+         
+a = [7, 89, 10, 2, 6, 3, 9, 6, 20, 21, 43]
 
 print("before sort a is " + str(a))
 
 #a = insertion_sort(a)
-a = select_sort(a)
-#a = merge_sort(a)
+#a = select_sort(a)
+a = merge_sort(a, 0, len(a) - 1)
 
 print("after sort a is " + str(a))
 
