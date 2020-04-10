@@ -151,6 +151,44 @@ def merge(arr, l, mid, r):
         arr[k] = R[j]
         j += 1
         k += 1
+'''
+    Partition(A, p, r)
+        x = A[r]
+        i = p - 1
+        for j = p to r - 1 do
+            if A[j] <= x
+                i++
+                A[i] <-> A[j]
+        i++
+        A[i] <-> A[r]
+        return i
+'''
+def partition(Arr, start, end):
+    x = Arr[end]
+    i = start - 1
+    
+    for j in range(start, end):
+        if Arr[j] <= x:
+            i = i + 1
+            Arr[i], Arr[j] = Arr[j], Arr[i]
+            
+    i = i + 1
+    Arr[i], Arr[end] = Arr[end], Arr[i]
+    return i
+    
+'''
+    QUICKSORT(A, p, r)
+        if p >= r return
+        q = Partition(A, p, r)
+        QUICKSORT(A, p, q - 1)
+        QUICKSORT(A, q + 1, r)    
+'''
+def quickSort(Arr, start, end):
+    if start < end:
+        q = partition(Arr, start, end)
+        quickSort(Arr, start, q - 1)
+        quickSort(Arr, q + 1, end)
+    
          
 '''
     HEAPIFY(A, i)
