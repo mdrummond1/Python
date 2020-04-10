@@ -49,6 +49,28 @@ def select_sort(array):
         array[loc] = array[i]
         array[i] = smallest
     return array
+'''
+SELECT-SORT-HELP(A)
+    for i = 1 to n - 1 do
+        j = findLargest(A, n - i + 1)
+        A[j] = A[n - i + 1]
+        A[n- i + 1] = A[j]
+'''
+
+'''
+SEL-SORT-HELPER(A, k)
+    index = 1;
+    for m = 1 to k do
+        if A[m] > A[index]
+            index = m
+    return index
+'''
+
+'''
+REC-SEL-SORT(A, n)
+    if n <= 1 return
+    
+'''
 
 '''
     MERGE-SORT(A, P, r)
@@ -130,6 +152,52 @@ def merge(arr, l, mid, r):
         j += 1
         k += 1
          
+'''
+    HEAPIFY(A, i)
+    //Guaranteed: subtree rooted at left(i) & right(i) are heaps
+    //make the subtree rooted at i into a heap
+    l = left(i)
+    r = right(i)
+    largest = i
+    
+    if (l <= A.heapsize) ^ (A[l] > A[largest])
+        largest = l
+    if (r <= A.heapsize ^ (A[r] > A[largest])
+        largest = r
+    if (largest != i)
+        A[largest] <-> A[i]
+        Heapify (A, largest)
+
+    NOTE:   parent(i) = floor(i/2)
+            left(i)   = 2i
+            right(i)  = 2i + 1
+
+'''
+def heapify(Arr, iter):
+    left = 2 * iter + 1
+    right = 2 * iter + 2
+    n = len(Arr)
+    largest = iter
+
+    if left < n and Arr[left] > Arr[largest]:
+        largest = left
+    if right < n and Arr[right] > Arr[largest]:
+        largest = right
+    if largest != iter:    
+        Arr[largest], Arr[iter] = Arr[iter], Arr[largest]
+        heapify(Arr, largest)
+     
+'''
+    BUILDHEAP(A) //Make A[1..n] into heap
+        A.heapsize = n;
+        //nodes floor(n/2) + 1, floor(n/2) + 2, ..., n are leaves
+        for i = floor(n/2) down to 1 do
+            Heapify(A, i)
+'''
+
+def buildHeap(Arr):
+    for i in range(math.floor(len(Arr) / 2) - 1, -1, -1):
+        heapify(Arr, i)
 a = [7, 89, 10, 2, 6, 3, 9, 6, 20, 21, 43]
 
 print("before sort a is " + str(a))
@@ -137,6 +205,8 @@ print("before sort a is " + str(a))
 #a = insertion_sort(a)
 #a = select_sort(a)
 a = merge_sort(a, 0, len(a) - 1)
-
 print("after sort a is " + str(a))
+b = buildHeap(a)
+print("after sort a is " + str(a))
+print("b is " + str(b))
 
